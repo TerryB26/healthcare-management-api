@@ -191,7 +191,7 @@ app.post('/api/login', (req, res) => {
   }
 
   // Query the database to find the user with the provided email
-  const sql = 'SELECT * FROM users WHERE user_email = ?';
+  const sql = 'SELECT u.*, r.role_name FROM users u join roles r on r.role_id = u.role_id WHERE user_email = ?';
   db.query(sql, [email], (err, result) => {
     if (err) {
       return res.status(500).json({ message: 'Internal server error' });
