@@ -224,7 +224,7 @@ app.post('/api/login', (req, res) => {
 
 //Get All Nurses
 app.get('/api/nurses', (req, res) => {
-  const sql = 'SELECT u.user_reference, n.nurse_id, u.user_name, u.user_surname, u.user_email, r.role_name, n.nurse_license_number, n.nurse_ward_id, w.ward_name from nurses n ' +
+  const sql = 'SELECT u.user_id, u.user_reference, n.nurse_id, u.user_name, u.user_surname, u.user_email, r.role_name, n.nurse_license_number, n.nurse_ward_id, w.ward_name from nurses n ' +
   'JOIN users u ' +
   'ON n.user_id = u.user_id ' +
   'JOIN roles r '+ 
@@ -263,9 +263,10 @@ app.delete('/api/delete-nurse/:user_id/:nurse_id', (req, res) => {
   
   const sql_user = `DELETE FROM users WHERE users.user_id = ${db.escape(user_id)}`;
   
-  const sql_doc = `DELETE FROM nurses WHERE nurses.nurse_id = ${db.escape(nurse_id)}`;
+  const sql_nuse = `DELETE FROM nurses WHERE nurses.nurse_id = ${db.escape(nurse_id)}`;
 
-  db.query(sql_doc, (err, result) => {
+
+  db.query(sql_nuse, (err, result) => {
     if(err) throw err;
     
     db.query(sql_user, (err, result) => {
