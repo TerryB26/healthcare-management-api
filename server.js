@@ -8,7 +8,7 @@ const jwt = require('jsonwebtoken');
 
 const PORT = process.env.PORT || 3000;
 
-const allowedOrigins = ['http://localhost:2663', 'http://localhost:4200','http://localhost:3000']; // Add your allowed origins here
+const allowedOrigins = ['http://localhost:2663', 'http://localhost:4200','http://localhost:3000' , 'https://hms-d17f3a934404.herokuapp.com']; // Add your allowed origins here
 
 // Configure CORS
 app.use(cors({
