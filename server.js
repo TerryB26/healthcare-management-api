@@ -191,7 +191,15 @@ app.post('/api/login', (req, res) => {
   }
 
   // Query the database to find the user with the provided email
-  const sql = 'SELECT u.*, r.role_name FROM users u join roles r on r.role_id = u.role_id WHERE user_email = ?';
+  // const sql = 'SELECT u.*, r.role_name FROM users u join roles r on r.role_id = u.role_id WHERE user_email = ?';
+  const sql = 'select u.*, r.role_name, n.nurse_license_number, n.nurse_ward_id, d.doctor_license_number, d.doctor_ward_id from users u '+
+  'join roles r '+
+  'on u.role_id = r.role_id '+
+  'left join nurses n '+
+  'on n.user_id = u.user_id '+
+  'left join doctors d '+
+  'on d.user_id = u.user_id '+
+  'where u.user_email = ?';
   db.query(sql, [email], (err, result) => {
     if (err) {
       return res.status(500).json({ message: 'Internal server error' });
