@@ -6,6 +6,8 @@ const bodyParser = require('body-parser');
 const nodemailer = require('nodemailer');
 const jwt = require('jsonwebtoken');
 
+const PORT = process.env.PORT || 3000;
+
 const allowedOrigins = ['http://localhost:2663', 'http://localhost:4200','http://localhost:3000']; // Add your allowed origins here
 
 // Configure CORS
@@ -451,6 +453,6 @@ app.get('/api/total-dep-wards', (req, res) => {
   })
 })
 
-app.listen(2663, () => {
-  console.log('Server is running on port 2663');
+app.listen(PORT, () => {
+  console.log('Server is running on port ${PORT}');
 })
