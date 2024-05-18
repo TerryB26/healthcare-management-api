@@ -50,10 +50,11 @@ function generateToken(user) {
 
 //database connection
 const db = mysql.createConnection({
-  host: 'localhost',
-    user: 'root',
-    password: '',
-    database: 'hms',
+  host: 'k2fqe1if4c7uowsh.cbetxkdyhwsb.us-east-1.rds.amazonaws.com',
+  user: 'pyvw5iwbi9ff9kap',
+  password: 'kf213d07vhz5pq5g',
+  port: 3306,
+  database: 'p6jlx4wtdk7uzuqd',
 });
 
 // ===================================================================================
