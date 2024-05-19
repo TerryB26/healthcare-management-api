@@ -296,6 +296,11 @@ app.get('/api/doctors', (req, res) => {
   const sql = 'SELECT d.doctor_id, u.user_id, u.user_reference, u.user_name, u.user_surname, u.user_email, d.doctor_license_number FROM doctors d ' +
   'JOIN users u ' +
   'ON u.user_id = d.user_id';
+
+  if(req.query.doctor_ward_id) {
+    sql += ' WHERE d.doctor_ward_id = ' + db.escape(req.query.doctor_ward_id);
+  }
+
   db.query(sql, (err, result) => {
     if(err) throw err;
     return res.json(result);
