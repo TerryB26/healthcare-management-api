@@ -232,13 +232,18 @@ app.post('/api/login', (req, res) => {
 
 //Get All Nurses
 app.get('/api/nurses', (req, res) => {
-  const sql = 'SELECT u.user_id, u.user_reference, n.nurse_id, u.user_name, u.user_surname, u.user_email, r.role_name, n.nurse_license_number, n.nurse_ward_id, w.ward_name from nurses n ' +
+  let sql = 'SELECT u.user_id, u.user_reference, n.nurse_id, u.user_name, u.user_surname, u.user_email, r.role_name, n.nurse_license_number, n.nurse_ward_id, w.ward_name from nurses n ' +
   'JOIN users u ' +
   'ON n.user_id = u.user_id ' +
   'JOIN roles r '+ 
   'ON r.role_id = u.role_id ' +
   'join wards w ' +
   'ON n.nurse_ward_id = w.ward_id';
+
+  if(req.query.nurse_ward_id) {
+    sql += ' WHERE n.nurse_ward_id = ' + db.escape(req.query.nurse_ward_id);
+  }
+
   db.query(sql, (err, result) => {
     if(err) throw err;
     return res.json(result);
