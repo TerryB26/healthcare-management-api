@@ -293,7 +293,7 @@ app.delete('/api/delete-nurse/:user_id/:nurse_id', (req, res) => {
 
 //Get All Doctors
 app.get('/api/doctors', (req, res) => {
-  const sql = 'SELECT d.doctor_id, u.user_id, u.user_reference, u.user_name, u.user_surname, u.user_email, d.doctor_license_number FROM doctors d ' +
+  let sql = 'SELECT d.doctor_id, u.user_id, u.user_reference, u.user_name, u.user_surname, u.user_email, d.doctor_license_number, d.doctor_ward_id FROM doctors d ' +
   'JOIN users u ' +
   'ON u.user_id = d.user_id';
 
