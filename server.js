@@ -154,6 +154,15 @@ app.get('/api/hospital-wards', (req, res) => {
   })
 })
 
+//get att conditions
+app.get('/api/health-conditions', (req, res) => {
+  const sql = 'SELECT * FROM health_conditions';
+  db.query(sql, (err, result) => {
+    if(err) throw err;
+    return res.json(result);
+  })
+})
+
 //get all roles
 app.get('/api/user-roles', (req, res) => {
   const sql = 'SELECT * FROM roles';
