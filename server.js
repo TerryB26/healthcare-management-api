@@ -414,7 +414,6 @@ app.post('/api/create-nurses', (req, res) => {
 
 // Add a Doctor
 app.post('/api/create-doctors', (req, res) => {
-  // console.log("🚀 ~ app.post ~ req:", req.body)
   const { user_name, user_reference, user_surname, user_email, user_password, role_id, user_id, is_active, doctor_license_number, doctor_ward_id } = req.body;
 
   
@@ -433,6 +432,30 @@ app.post('/api/create-doctors', (req, res) => {
   });
 });
 
+
+// Add a Patient
+app.post('/api/create-patients', (req, res) => {
+  const { user_name, user_reference, user_surname, user_email, user_password, role_id, user_id, is_active, patient_id } = req.body;
+  console.log("🚀 ~ app.post ~ req.body:", req.body)
+
+  // Insert into users table
+  const sqlUsers = 'INSERT INTO users (user_id, user_reference, user_name, user_surname, user_email, user_password, role_id, is_active) VALUES (?, ?, ?, ?, ?, ?, ?, ?)';
+  // db.query(sqlUsers, [user_id, user_reference, user_name, user_surname, user_email, user_password, role_id, is_active], (err, result) => {
+  //   if (err) {
+  //     res.status(500).json({ error: 'Failed to add patient' });
+  //   } else {
+  //     // Insert into patients table
+  //     const sqlPatients = 'INSERT INTO patients (patient_id, user_id) VALUES (?, ?)';
+  //     db.query(sqlPatients, [patient_id, user_id], (err, result) => {
+  //       if (err) {
+  //         res.status(500).json({ error: 'Failed to add patient' });
+  //       } else {
+  //         res.status(200).json({ message: 'Patient added successfully' });
+  //       }
+  //     });
+  //   }
+  // });
+});
 
 
 
