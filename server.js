@@ -435,32 +435,48 @@ app.post('/api/create-doctors', (req, res) => {
 
 // Add a Patient
 app.post('/api/create-patients', (req, res) => {
-  const { user_name, user_reference, user_surname, user_email, user_password, role_id, user_id, is_active, patient_id } = req.body;
-  console.log("🚀 ~ app.post ~ req.body:", req.body)
+  const { 
+    patientName,patientSurname,user_email,patientIdNumber,patientLanguage,maritalStatus,nokRelationship,nokNameSurname,nokContactNo,nokAltContactNo,patientAddress,patientTown,patientAreaCode,file_name,editedBy,
+    patientProvince,patientWardID,admissionReason,patientConditionID,patientMedicalHistory,patientPrevTreatment,user_id,user_reference,user_password,role_id,is_active,lastrelativeID,lastPatientID,patient_title
+  } = req.body;
 
-  // Insert into users table
+
+  //Insert into users table
   const sqlUsers = 'INSERT INTO users (user_id, user_reference, user_name, user_surname, user_email, user_password, role_id, is_active) VALUES (?, ?, ?, ?, ?, ?, ?, ?)';
-  // db.query(sqlUsers, [user_id, user_reference, user_name, user_surname, user_email, user_password, role_id, is_active], (err, result) => {
-  //   if (err) {
-  //     res.status(500).json({ error: 'Failed to add patient' });
-  //   } else {
-  //     // Insert into patients table
-  //     const sqlPatients = 'INSERT INTO patients (patient_id, user_id) VALUES (?, ?)';
-  //     db.query(sqlPatients, [patient_id, user_id], (err, result) => {
-  //       if (err) {
-  //         res.status(500).json({ error: 'Failed to add patient' });
-  //       } else {
-  //         res.status(200).json({ message: 'Patient added successfully' });
-  //       }
-  //     });
-  //   }
-  // });
+  db.query(sqlUsers, [user_id, user_reference, patientName, patientSurname, user_email, user_password, role_id, is_active], (err, result) => {
+    if (err) throw err;
+
+    // Insert into Patients table
+    const sqlPatients = 'INSERT INTO patients (user_id, patient_ward_id, ID_Number,language,patient_marital_status,from_address,from_province,from_town,from_area_code,admission_reason,patient_title,relative_id) VALUES (?, ?, ?,?, ?, ?,?, ?, ?,?, ?,?)';
+    db.query(sqlPatients, [user_id, patientWardID, patientIdNumber,patientLanguage,maritalStatus,patientAddress,patientProvince,patientTown,patientAreaCode,admissionReason,patient_title,lastrelativeID], (err, result) => {
+      if (err) throw err;
+
+       // Get the ID of the inserted patient
+        const lastPatientIDA = result.insertId;
+      
+        const sqlRelatives = 'INSERT INTO relatives (relative_id, patient_id, name_surname ,contact_number, alt_contact_number, relationship) VALUES (?, ?, ?, ?, ?, ?)';
+        db.query(sqlRelatives, [lastrelativeID, lastPatientIDA, nokNameSurname, nokContactNo,nokAltContactNo,nokRelationship], (err, result) => {
+          if (err) throw err;
+
+              const sqlFile = 'INSERT INTO patient_files (patient_id, condition_id , medical_history, previous_treatment, file_name) VALUES (?, ?, ?, ?, ?)';
+
+              db.query(sqlFile, [lastPatientIDA, patientConditionID, patientMedicalHistory,patientPrevTreatment,file_name], (err, result) => {
+                if (err) throw err;
+
+                const lastFileIDA = result.insertId;
+
+                    const sqlFileLogs = 'INSERT INTO patient_file_logs (file_id, edited_by) VALUES (?, ?)';
+
+                    db.query(sqlFileLogs, [lastFileIDA, editedBy], (err, result) => {
+                      if (err) throw err;
+
+                      return res.json({ message: 'Patient added successfully' });
+                    });
+              });
+        });
+    });
+  });
 });
-
-
-
-
-
 
 
 
@@ -530,5 +546,5 @@ app.get('/api/total-dep-wards', (req, res) => {
 })
 
 app.listen(PORT, () => {
-  console.log('Server is running on port ${PORT}');
+  console.log(`Server is running on port ${PORT}`);
 })
