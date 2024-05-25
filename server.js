@@ -436,6 +436,23 @@ app.put('/api/update-patient-file/:file_id', (req, res) => {
   })
  })
 
+ app.put('/api/update-patient-status/:file_id', (req, res) => {
+  const { file_id } = req.params;
+
+  const { patientConditionID} = req.body;
+  
+
+  const sql = 'UPDATE patient_files SET condition_id = ? WHERE file_id = ?';
+  db.query(sql, [patientConditionID, file_id], (err, result) => {
+    if(err) throw err;
+
+    res.status(200).json({ message: 'Patient file updated successfully' });
+
+  })
+ })
+
+ 
+
 
 // Delete Patient
 app.delete('/api/delete-patient/:user_id', (req, res) => {
