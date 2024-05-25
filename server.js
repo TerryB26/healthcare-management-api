@@ -156,7 +156,12 @@ app.get('/api/hospital-wards', (req, res) => {
 
 //get att conditions
 app.get('/api/health-conditions', (req, res) => {
-  const sql = 'SELECT * FROM health_conditions';
+  let sql = 'SELECT * FROM health_conditions';
+  
+  if(req.query.condition_id) {
+    sql += ' WHERE condition_id != ' + db.escape(req.query.condition_id);
+  }
+
   db.query(sql, (err, result) => {
     if(err) throw err;
     return res.json(result);
