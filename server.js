@@ -356,6 +356,47 @@ app.delete('/api/delete-doctor/:user_id/:doctor_id', (req, res) => {
 })
 
 
+//Get Patients
+app.get('/api/patients', (req, res) => {
+  let sql = 
+  'select '+
+  ' u.*, p.patient_id,  w.ward_id , w.ward_description ,  '+
+  ' w.ward_name, p.patient_title,  '+
+  ' p.patient_marital_status, p.ID_Number, p.from_address, p.from_province,  '+
+  ' p.from_town, p.from_area_code, p.language, p.admission_reason,  '+
+  ' r.name_surname,r.contact_number,r.alt_contact_number,r.relationship, '+
+  ' pf.file_id,pf.file_name,pf.health_details,pf.medical_history,pf.previous_treatment, h.condition_name, h.condition_description, '+
+  ' pl.file_log_date, pl.edited_by '+
+  ' from users u '+
+  ' join patients p  '+
+  ' on u.user_id = p.user_id '+
+  ' join wards w '+
+  ' on p.patient_ward_id = w.ward_id '+
+  ' join relatives r '+
+  ' on r.relative_id = p.relative_id '+
+  ' join patient_files pf '+
+  ' on pf.patient_id = p.patient_id '+
+  ' join health_conditions h '+
+  ' on h.condition_id = pf.condition_id '+
+  ' join patient_file_logs pl '+
+  ' on pl.file_id = pf.file_id ';
+
+
+  if(req.query.patient_id) {
+    sql += ' WHERE p.patient_id = ' + db.escape(req.query.patient_id);
+  }
+
+  db.query(sql, (err, result) => {
+    if(err) throw err;
+    return res.json(result);
+  })
+})
+
+
+
+
+
+
 // ===================================================================================
 
 app.get('/api/role/:roleName', (req, res) => {
