@@ -370,7 +370,7 @@ app.get('/api/patients', (req, res) => {
   ' p.patient_marital_status, p.ID_Number, p.from_address, p.from_province,  '+
   ' p.from_town, p.from_area_code, p.language, p.admission_reason,  '+
   ' r.name_surname,r.contact_number,r.alt_contact_number,r.relationship, '+
-  ' pf.file_id,pf.file_name,pf.health_details,pf.medical_history,pf.previous_treatment, h.condition_name, h.condition_description, '+
+  ' pf.file_id,pf.file_name,pf.health_details,pf.medical_history,pf.previous_treatment, h.condition_id, h.condition_name, h.condition_description, '+
   ' pl.file_log_date, pl.edited_by '+
   ' from users u '+
   ' join patients p  '+
