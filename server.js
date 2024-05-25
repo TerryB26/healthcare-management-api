@@ -391,7 +391,7 @@ app.get('/api/patients', (req, res) => {
   }
 
   if(req.query.file_id) {
-    sql += ' WHEREpf.file_id = ' + db.escape(req.query.file_id);
+    sql += ' WHERE pf.file_id = ' + db.escape(req.query.file_id);
   }
 
   db.query(sql, (err, result) => {
