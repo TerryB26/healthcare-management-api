@@ -374,12 +374,24 @@ app.get('/api/patients', (req, res) => {
   ' on p.patient_ward_id = w.ward_id '+
   ' join relatives r '+
   ' on r.relative_id = p.relative_id '+
+  ' join ( '+
+    ' select pf.patient_id, max(pf.file_id) as max_file_id '+
+    ' from patient_files pf '+
+    ' group by pf.patient_id '+
+  ' ) as latest_files '+
+  ' on latest_files.patient_id = p.patient_id '+
   ' join patient_files pf '+
-  ' on pf.patient_id = p.patient_id '+
+  ' on pf.patient_id = p.patient_id and pf.file_id = latest_files.max_file_id '+
   ' join health_conditions h '+
   ' on h.condition_id = pf.condition_id '+
+  ' join ( '+
+    ' select pl.file_id, max(pl.file_log_date) as max_log_date '+
+    ' from patient_file_logs pl '+
+    ' group by pl.file_id '+
+  ' ) as latest_logs '+
+  ' on latest_logs.file_id = pf.file_id '+
   ' join patient_file_logs pl '+
-  ' on pl.file_id = pf.file_id ';
+  ' on pl.file_id = pf.file_id and pl.file_log_date = latest_logs.max_log_date ';
 
 
   if(req.query.user_id) {
@@ -399,6 +411,25 @@ app.get('/api/patients', (req, res) => {
     return res.json(result);
   })
 })
+
+//update patient file
+app.put('/api/update-patient-file/:file_id', (req, res) => {
+  const { file_id } = req.params;
+
+  const { patientFileDetails,medical_history,previous_treatment,updated_by} = req.body;
+  
+
+  const sql = 'UPDATE patient_files SET health_details = ?, medical_history = ?, previous_treatment = ? WHERE file_id = ?';
+  db.query(sql, [patientFileDetails,medical_history,previous_treatment, file_id], (err, result) => {
+    if(err) throw err;
+    
+        const logSql = 'INSERT INTO patient_file_logs (file_id, edited_by) VALUES (?, ?)';
+        db.query(logSql, [file_id, updated_by], (err, logResult) => {
+          if (err) throw err;
+          res.status(200).json({ message: 'Patient file updated successfully' });
+        });     
+  })
+ })
 
 
 // Delete Patient
