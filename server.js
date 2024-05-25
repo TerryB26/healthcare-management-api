@@ -393,6 +393,22 @@ app.get('/api/patients', (req, res) => {
 })
 
 
+// Delete Patient
+app.delete('/api/delete-patient/:user_id', (req, res) => {
+  const { user_id } = req.params;
+  
+  const sql_user = `DELETE FROM users WHERE users.user_id = ${db.escape(user_id)}`;
+  
+  db.query(sql_user, (err, result) => {
+    if (err) {
+      res.status(500).json({ error: 'Failed to delete patient' });
+    } else {
+      res.status(200).json({ message: 'Patient deleted successfully' });
+    }
+  });
+});
+
+
 
 
 
