@@ -390,6 +390,10 @@ app.get('/api/patients', (req, res) => {
     sql += ' WHERE w.ward_id = ' + db.escape(req.query.ward_id);
   }
 
+  if(req.query.file_id) {
+    sql += ' WHEREpf.file_id = ' + db.escape(req.query.file_id);
+  }
+
   db.query(sql, (err, result) => {
     if(err) throw err;
     return res.json(result);
