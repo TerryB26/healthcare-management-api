@@ -6,7 +6,7 @@ const bodyParser = require('body-parser');
 const nodemailer = require('nodemailer');
 const jwt = require('jsonwebtoken');
 
-const PORT = process.env.PORT || 3000;
+const PORT = 2663;
 
 const allowedOrigins = ['http://localhost:2663', 'http://localhost:4200','http://localhost:3000' , 'https://hms-d17f3a934404.herokuapp.com']; // Add your allowed origins here
 
@@ -436,7 +436,7 @@ app.post('/api/create-doctors', (req, res) => {
 // Add a Patient
 app.post('/api/create-patients', (req, res) => {
   const { user_name, user_reference, user_surname, user_email, user_password, role_id, user_id, is_active, patient_id } = req.body;
-  console.log("🚀 ~ app.post ~ req.body:", req.body)
+  
 
   // Insert into users table
   const sqlUsers = 'INSERT INTO users (user_id, user_reference, user_name, user_surname, user_email, user_password, role_id, is_active) VALUES (?, ?, ?, ?, ?, ?, ?, ?)';
@@ -530,5 +530,5 @@ app.get('/api/total-dep-wards', (req, res) => {
 })
 
 app.listen(PORT, () => {
-  console.log('Server is running on port ${PORT}');
+  console.log(`Server is running on port ${PORT}`);
 })
