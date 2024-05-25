@@ -383,8 +383,11 @@ app.get('/api/patients', (req, res) => {
 
 
   if(req.query.user_id) {
-    console.log("🚀 ~ app.get ~ req.query:", req.query)
     sql += ' WHERE u.user_id = ' + db.escape(req.query.user_id);
+  }
+
+  if(req.query.ward_id) {
+    sql += ' WHERE w.ward_id = ' + db.escape(req.query.ward_id);
   }
 
   db.query(sql, (err, result) => {
