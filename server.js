@@ -453,6 +453,30 @@ app.get('/api/last-active-user', (req, res) => {
     return res.json(result);
   })
 })
+//Get Last active patient
+app.get('/api/lastPatientId', (req, res) => {
+  const sql = 'SELECT MAX(patient_id) as last_patient FROM patients';
+
+  db.query(sql, (err, result) => {
+    if (err) throw err;
+
+    // If the result is NULL, return 0, otherwise return the result
+    const lastPatientId = result[0].last_patient === null ? 0 : result[0].last_patient;
+    res.json({ lastPatientId });
+  });
+});
+//Get Last active relative
+app.get('/api/lastRelativeId', (req, res) => {
+  const sql = 'SELECT MAX(patient_id) as last_relative FROM relatives';
+
+  db.query(sql, (err, result) => {
+    if (err) throw err;
+
+    // If the result is NULL, return 0, otherwise return the result
+    const lastRelativeId = result[0].last_relative === null ? 0 : result[0].last_relative;
+    res.json({ lastRelativeId });
+  });
+});
 
 //Total Nurses, Doctors and Patients
 app.get('/api/user-stats', (req, res) => {
