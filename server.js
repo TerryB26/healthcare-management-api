@@ -382,8 +382,9 @@ app.get('/api/patients', (req, res) => {
   ' on pl.file_id = pf.file_id ';
 
 
-  if(req.query.patient_id) {
-    sql += ' WHERE p.patient_id = ' + db.escape(req.query.patient_id);
+  if(req.query.user_id) {
+    console.log("🚀 ~ app.get ~ req.query:", req.query)
+    sql += ' WHERE u.user_id = ' + db.escape(req.query.user_id);
   }
 
   db.query(sql, (err, result) => {
