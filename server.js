@@ -475,8 +475,8 @@ app.get('/api/appointments', (req, res) => {
   'join patients p '+ 
   'on p.patient_id = a.patient_id';
 
-  if(req.query.doctor_ward_id) {
-    sql += ' WHERE d.doctor_ward_id = ' + db.escape(req.query.doctor_ward_id);
+  if(req.query.doctor_license_number) {
+    sql += ' WHERE d.doctor_license_number = ' + db.escape(req.query.doctor_license_number);
   }
 
   if(req.query.doctor_id) {
