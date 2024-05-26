@@ -466,6 +466,32 @@ app.post('/api/create-appointment', (req, res) => {
   });
 });
 
+// View all appointments
+app.get('/api/appointments', (req, res) => {
+  let sql = 
+  'select * from appointments a '+
+  'join doctors d '+ 
+  'on a.doctor_id = d.doctor_id '+
+  'join patients p '+ 
+  'on p.patient_id = a.patient_id';
+
+  if(req.query.doctor_ward_id) {
+    sql += ' WHERE d.doctor_ward_id = ' + db.escape(req.query.doctor_ward_id);
+  }
+
+  if(req.query.doctor_id) {
+    sql += ' WHERE d.doctor_id = ' + db.escape(req.query.doctor_id);
+  }
+
+  db.query(sql, (err, result) => {
+    if (err) {
+      res.status(500).json({ error: 'Failed to fetch appointments' });
+    } else {
+      res.status(200).json(result);
+    }
+  });
+});
+
  
 
 
