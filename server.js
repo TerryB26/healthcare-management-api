@@ -474,7 +474,7 @@ app.get('/api/appointments', (req, res) => {
   'on a.doctor_id = d.doctor_id '+
   'join patients p '+ 
   'on p.patient_id = a.patient_id '+
-  'join users u ';
+  'join users u '+
   'on u.user_id = p.user_id ';
 
   if(req.query.doctor_license_number) {
