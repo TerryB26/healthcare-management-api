@@ -451,6 +451,21 @@ app.put('/api/update-patient-file/:file_id', (req, res) => {
   })
  })
 
+ //Create an appointment
+app.post('/api/create-appointment', (req, res) => {
+  const { doctorID, appointmentDate, appointmentTime, appointmentReason, patient_id, created_by } = req.body;
+  
+
+  const sql = 'INSERT INTO appointments (patient_id, doctor_id, appointment_date, appointment_time, appointment_reason, created_by) VALUES (?, ?, ?, ? ,? ,?)';
+  db.query(sql, [patient_id, doctorID, appointmentDate, appointmentTime, appointmentReason, created_by], (err, result) => {
+    if(err) throw err; 
+    
+    else {
+      res.status(200).json({ message: 'Appointment created successfully' });
+    }
+  });
+});
+
  
 
 
