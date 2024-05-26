@@ -473,7 +473,7 @@ app.get('/api/appointments', (req, res) => {
   'join doctors d '+ 
   'on a.doctor_id = d.doctor_id '+
   'join patients p '+ 
-  'on p.patient_id = a.patient_id'+
+  'on p.patient_id = a.patient_id '+
   'join users u ';
   'on u.user_id = p.user_id ';
 
