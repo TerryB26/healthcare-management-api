@@ -118,7 +118,7 @@ app.get('/api/department-details/:id', (req, res) => {
 
   const sql = 'SELECT d.department_name, d.department_description, '+
   'd.department_email, d.department_phone , w.ward_name,'+
-  ' w.ward_description, w.ward_capacity FROM wards w '+
+  ' w.ward_description, w.ward_capacity, w.room_number FROM wards w '+
   'join dpartments d '+
   'on w.department_id = d.department_id '+
   'where d.department_id = ' + id;
