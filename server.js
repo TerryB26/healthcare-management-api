@@ -482,6 +482,10 @@ app.get('/api/appointments', (req, res) => {
     sql += ' WHERE d.doctor_license_number = ' + db.escape(req.query.doctor_license_number);
   }
 
+  if(req.query.createdByEmail) {
+    sql += ' WHERE a.created_by = ' + db.escape(req.query.createdByEmail);
+  }
+
   if(req.query.doctor_id) {
     sql += ' WHERE d.doctor_id = ' + db.escape(req.query.doctor_id);
   }
