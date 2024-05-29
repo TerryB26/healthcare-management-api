@@ -454,10 +454,11 @@ app.put('/api/update-patient-file/:file_id', (req, res) => {
  //Create an appointment
 app.post('/api/create-appointment', (req, res) => {
   const { doctorID, appointmentDate, appointmentTime, appointmentReason, patient_id, created_by } = req.body;
+  appStatus = "Awaiting Approval";
   
 
-  const sql = 'INSERT INTO appointments (patient_id, doctor_id, appointment_date, appointment_time, appointment_reason, created_by) VALUES (?, ?, ?, ? ,? ,?)';
-  db.query(sql, [patient_id, doctorID, appointmentDate, appointmentTime, appointmentReason, created_by], (err, result) => {
+  const sql = 'INSERT INTO appointments (patient_id, doctor_id, appointment_date, appointment_time, appointment_reason, created_by, appointment_status) VALUES (?, ?, ?, ? ,? ,? ,?)';
+  db.query(sql, [patient_id, doctorID, appointmentDate, appointmentTime, appointmentReason, created_by, appStatus], (err, result) => {
     if(err) throw err; 
     
     else {
@@ -490,6 +491,20 @@ app.get('/api/appointments', (req, res) => {
       res.status(500).json({ error: 'Failed to fetch appointments' });
     } else {
       res.status(200).json(result);
+    }
+  });
+});
+
+
+// Update Appointment Status
+app.post('/api/update-appointment-status', (req, res) => {
+  const { status, appointment_id } = req.body
+
+  const sql = 'UPDATE appointments SET appointment_status = ? WHERE appointment_id = ?';
+  db.query(sql, [status, appointment_id], (err, result) => {
+    if(err) throw err;  
+    else {
+      res.status(200).json({ message: 'Appointment status updated successfully' });
     }
   });
 });
