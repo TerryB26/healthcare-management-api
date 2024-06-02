@@ -5,6 +5,8 @@ const app = express();
 const bodyParser = require('body-parser');
 const nodemailer = require('nodemailer');
 const jwt = require('jsonwebtoken');
+let globalAuthToken;
+console.log("🚀 ~ globalAuthToken:", globalAuthToken)
 
 const PORT = process.env.PORT || 3000;
 
@@ -553,8 +555,8 @@ app.get('/api/role/:roleName', (req, res) => {
 
 // Add an admin
 app.post('/api/create-admins', (req, res) => {
-  const { user_reference, user_name, user_surname, user_email, user_password, role_id, user_id, is_active } = req.body;
-
+  const { user_reference, user_name, user_surname, user_email, user_password, role_id, user_id, is_active, auth_token } = req.body;
+  
   // Insert into users table
   const sqlUsers = 'INSERT INTO users (user_id, user_reference, user_name, user_surname, user_email, user_password, role_id, is_active) VALUES (?, ?, ?, ?, ?, ?, ?, ?)';
   db.query(sqlUsers, [user_id, user_reference, user_name, user_surname, user_email, user_password, role_id, is_active], (err, result) => {
@@ -595,9 +597,6 @@ app.post('/api/create-nurses', (req, res) => {
 // Add a Doctor
 app.post('/api/create-doctors', (req, res) => {
   const { user_name, user_reference, user_surname, user_email, user_password, role_id, user_id, is_active, doctor_license_number, doctor_ward_id } = req.body;
-
-  
-
   //Insert into users table
   const sqlUsers = 'INSERT INTO users (user_id, user_reference, user_name, user_surname, user_email, user_password, role_id, is_active) VALUES (?, ?, ?, ?, ?, ?, ?, ?)';
   db.query(sqlUsers, [user_id, user_reference, user_name, user_surname, user_email, user_password, role_id, is_active], (err, result) => {
@@ -728,6 +727,7 @@ app.get('/api/total-dep-wards', (req, res) => {
 
 app.post('/api/get-key', (req, res) => {
   const { auth_token } = req.body;
+  globalAuthToken = auth_token;
 
   const sqlKey = 'INSERT INTO basekey (base_key) VALUES (?)';
 
