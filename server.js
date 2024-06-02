@@ -750,7 +750,6 @@ app.post('/api/get-key', (req, res) => {
 // Get records in the basekey table within the last 5 minutes
 app.get('/api/recent-basekeys', (req, res) => {
   const currentTime = new Date();
-  currentTime.setHours(currentTime.getHours() - 2); // Adjust for the 2-hour difference
   const fiveMinutesAgo = new Date(currentTime.getTime() - 5 * 60000); // Subtract 5 minutes in milliseconds
 
   // Format the date in SQL datetime format
