@@ -565,6 +565,21 @@ app.post('/api/create-admins', (req, res) => {
 });
 
 
+// Get all admins
+app.get('/api/admins', (req, res) => {
+  const sql = 'select * from users u '+
+  'join admins a '+
+  'on u.user_id = a.user_id '+
+  'where user_email != \'ChristopherV177@sa-hospital.co.za\'';
+  db.query(sql, (err, result) => {
+    if (err) {
+      res.status(500).json({ error: 'Failed to fetch admins' });
+    } else {
+      res.status(200).json(result);
+    }
+  });
+});
+
 
 // Add an Nurse
 app.post('/api/create-nurses', (req, res) => {
