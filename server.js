@@ -754,10 +754,8 @@ app.get('/api/recent-basekeys', (req, res) => {
 
   const sql = 'SELECT * FROM basekey WHERE created_at > ?';
   db.query(sql, [fiveMinutesAgo], (err, result) => {
-    if (err) {
-      console.error(err);
-      res.status(500).json({ error: 'Internal server error' });
-    } else {
+    if (err) throw err;
+    else {
       res.json(result);
     }
   });
