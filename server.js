@@ -750,10 +750,14 @@ app.post('/api/get-key', (req, res) => {
 // Get records in the basekey table within the last 5 minutes
 app.get('/api/recent-basekeys', (req, res) => {
   const currentTime = new Date();
+  currentTime.setHours(currentTime.getHours() - 2); // Adjust for the 2-hour difference
   const fiveMinutesAgo = new Date(currentTime.getTime() - 5 * 60000); // Subtract 5 minutes in milliseconds
 
-  const sql = 'SELECT * FROM basekey WHERE created_at > ?';
-  db.query(sql, [fiveMinutesAgo], (err, result) => {
+  // Format the date in SQL datetime format
+  const formattedDate = `${fiveMinutesAgo.getFullYear()}-${('0' + (fiveMinutesAgo.getMonth() + 1)).slice(-2)}-${('0' + fiveMinutesAgo.getDate()).slice(-2)} ${('0' + fiveMinutesAgo.getHours()).slice(-2)}:${('0' + fiveMinutesAgo.getMinutes()).slice(-2)}:${('0' + fiveMinutesAgo.getSeconds()).slice(-2)}`;
+
+  const sql = 'SELECT * FROM basekey WHERE created_on > ?';
+  db.query(sql, [formattedDate], (err, result) => {
     if (err) throw err;
     else {
       res.json(result);
