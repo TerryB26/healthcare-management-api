@@ -725,6 +725,13 @@ app.get('/api/total-dep-wards', (req, res) => {
   })
 })
 
+
+app.post('/api/get-key', (req, res) => {
+  console.log("🚀 ~ app.post ~ req.body:", req.body)
+
+  res.send('Post request successful');
+});
+
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
 })
