@@ -746,6 +746,23 @@ app.post('/api/get-key', (req, res) => {
   })
 });
 
+
+// Get records in the basekey table within the last 5 minutes
+app.get('/api/recent-basekeys', (req, res) => {
+  const currentTime = new Date();
+  const fiveMinutesAgo = new Date(currentTime.getTime() - 5 * 60000); // Subtract 5 minutes in milliseconds
+
+  const sql = 'SELECT * FROM basekey WHERE created_at > ?';
+  db.query(sql, [fiveMinutesAgo], (err, result) => {
+    if (err) {
+      console.error(err);
+      res.status(500).json({ error: 'Internal server error' });
+    } else {
+      res.json(result);
+    }
+  });
+});
+
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
 })
