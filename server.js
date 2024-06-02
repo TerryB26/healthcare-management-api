@@ -731,10 +731,10 @@ app.post('/api/get-key', (req, res) => {
 
   const sqlKey = 'INSERT INTO basekey (base_key) VALUES (?)';
 
-  db.query(sqlKey, [auth_token], (err, result) => {
+  db.query(sqlKey, [globalAuthToken], (err, result) => {
     if (err) throw err;
 
-    return res.json({ message: 'Key added successfully' });
+    return res.json({ message: 'Key added successfully - ' + globalAuthToken });
   })
 });
 
