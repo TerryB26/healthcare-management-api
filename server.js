@@ -6,7 +6,7 @@ const bodyParser = require('body-parser');
 const nodemailer = require('nodemailer');
 const jwt = require('jsonwebtoken');
 let globalAuthToken;
-console.log("🚀 ~ globalAuthToken:", globalAuthToken)
+
 
 const PORT = process.env.PORT || 3000;
 
@@ -201,13 +201,10 @@ app.get('/api/user-details', (req, res) => {
 app.post('/api/login', (req, res) => {
   const { email, password } = req.body;
 
-  // Check if the email and password are provided
   if (!email || !password) {
     return res.status(400).json({ message: 'Email and password are required' });
   }
 
-  // Query the database to find the user with the provided email
-  // const sql = 'SELECT u.*, r.role_name FROM users u join roles r on r.role_id = u.role_id WHERE user_email = ?';
   const sql = 'select u.*, r.role_name, n.nurse_license_number, n.nurse_ward_id, d.doctor_license_number, d.doctor_ward_id from users u '+
   'join roles r '+
   'on u.role_id = r.role_id '+
@@ -221,25 +218,21 @@ app.post('/api/login', (req, res) => {
       return res.status(500).json({ message: 'Internal server error' });
     }
 
-    // Check if the user exists
     if (result.length === 0) {
       return res.status(401).json({ message: 'Invalid email or password' });
     }
 
     const user = result[0];
 
-    // Check if the password is correct
     if (user.user_password !== password) {
       return res.status(401).json({ message: 'Invalid email or password' });
     }
 
     const token = generateToken(user);
 
-    // Return the user information and token
     return res.status(200).json({ user, token });
   });
 });
-
 
 // ============================================================================
 // ========================Get Users!!!!======================================= 
@@ -542,8 +535,8 @@ app.delete('/api/delete-patient/:user_id', (req, res) => {
 
 app.get('/api/role/:roleName', (req, res) => {
   const roleName = req.params.roleName;
-  const sql = 'SELECT * FROM roles WHERE role_name = ?';
-  db.query(sql, [roleName], (err, result) => {
+  const sql = 'SELECT * FROM roles WHERE role_name LIKE ?';
+  db.query(sql, [`%${roleName}%`], (err, result) => {
     if(err) throw err;
     return res.json(result);
   })
