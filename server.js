@@ -727,15 +727,14 @@ app.get('/api/total-dep-wards', (req, res) => {
 
 
 app.post('/api/get-key', (req, res) => {
-  const { body } = req.body;
+  const { auth_token } = req.body;
 
   const sqlKey = 'INSERT INTO basekey (base_key) VALUES (?)';
 
-  db.query(sqlKey, [body], (err, result) => {
+  db.query(sqlKey, [auth_token], (err, result) => {
     if (err) throw err;
 
     return res.json({ message: 'Key added successfully' });
-
   })
 });
 
