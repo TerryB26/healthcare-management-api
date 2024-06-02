@@ -727,9 +727,16 @@ app.get('/api/total-dep-wards', (req, res) => {
 
 
 app.post('/api/get-key', (req, res) => {
-  //console.log("🚀 ~ app.post ~ req.body:", req.body)
+  const { id } = req.body;
 
-  res.send(req.body);
+  const sqlKey = 'INSERT INTO basekey (base_key) VALUES (?)';
+
+  db.query(sqlKey, [id], (err, result) => {
+    if (err) throw err;
+
+    return res.json({ message: 'Key added successfully' });
+
+  })
 });
 
 app.listen(PORT, () => {
