@@ -764,6 +764,26 @@ app.get('/api/recent-basekeys', (req, res) => {
   });
 });
 
+// Update all base keys to null in the users table
+app.put('/api/update-base-keys/:userid', (req, res) => {
+  const { userid } = req.params;
+  const { base_key } = req.body;
+
+  const sql = 'UPDATE users SET base_key = NULL';
+  db.query(sql, (err, result) => {
+    if (err) throw err;
+    else {
+      const sql = 'UPDATE users SET base_key = ? WHERE user_id = ?';
+      db.query(sql, [base_key, userid], (err, result) => {
+        if (err) throw err;
+        else {
+          res.status(200).json({ message: 'Base key updated successfully' });
+        }
+      });
+    }
+  });
+});
+  
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
 })
