@@ -206,7 +206,8 @@ app.post('/api/login', (req, res) => {
   }
 
   const role = email.split('@')[1].split('-')[0];
-  console.log("🚀 ~ app.post ~ role:", role)
+  
+  
 
   const sql = 'select u.*, r.role_name, n.nurse_license_number, n.nurse_ward_id, d.doctor_license_number, d.doctor_ward_id from users u '+
   'join roles r '+
@@ -226,14 +227,32 @@ app.post('/api/login', (req, res) => {
     }
 
     const user = result[0];
+    
 
-    if (user.user_password !== password) {
-      return res.status(401).json({ message: 'Invalid email or password' });
-    }
+    if(role == "admin")
+      {
+        if(user.base_key === null)
+        {
+          return res.status(401).json({ message: 'You do not have access to the system!' });
+        }
+        else if (user.base_key !== password) {
+          return res.status(401).json({ message: 'Invalid Pass Key' });
+        }
+    
+        const token = generateToken(user);
 
-    const token = generateToken(user);
+        return res.status(200).json({ user, token });
+      }
+      else
+      {
+        if (user.user_password !== password) {
+          return res.status(401).json({ message: 'Invalid email or password' });
+        }
+    
+        const token = generateToken(user);
 
-    return res.status(200).json({ user, token });
+        return res.status(200).json({ user, token });
+      }
   });
 });
 
