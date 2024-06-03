@@ -205,6 +205,9 @@ app.post('/api/login', (req, res) => {
     return res.status(400).json({ message: 'Email and password are required' });
   }
 
+  const role = email.split('@')[1].split('-')[0];
+  console.log("🚀 ~ app.post ~ role:", role)
+
   const sql = 'select u.*, r.role_name, n.nurse_license_number, n.nurse_ward_id, d.doctor_license_number, d.doctor_ward_id from users u '+
   'join roles r '+
   'on u.role_id = r.role_id '+
